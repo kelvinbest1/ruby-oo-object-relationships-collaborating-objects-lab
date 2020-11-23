@@ -1,47 +1,54 @@
+
 require "pry"
-class Artist
-    attr_accessor :name, :songs
+
+class Artist 
+  attr_accessor :name, :songs
   
-    @@all = []
+  @@all = []
   
-    def initialize(name)
-      @name = name
-      @songs = []
-      save
-    end
-  
-    def self.all
-      @@all
-    end
-  
-    def self.create(name)
-      artist = self.new(name)
-      artist.name = name
-      artist
-    end
-  
-    def self.find(name)
-      self.all.detect { |artist| artist.name == name }
-    end
-  
-    def self.find_or_create_by_name(name)
-      self.find(name) || self.create(name)
-    end
-  
-    def add_song(song)
-      @songs << song
-    end
-  
-    def print_songs
-      songs.each { |song| puts song.name }
-    end
-  
-    def save
-      @@all << self
-    end
-  
-    def songs
-        @songs
-    end
-           
+  def initialize(name)
+    @name = name
+    @songs = []
+    @@all << self
   end
+  
+  def self.all 
+    @@all 
+  end
+  
+  def songs
+    Song.all.select {|song| song.artist == self}
+  end
+  
+  def add_song(song)
+    song.artist = self
+    @songs << song
+  end
+  
+  def self.find_or_create_by_name(name)
+    my_artist = @@all.find do |artist|
+      artist.name == name
+     end
+     if my_artist
+       my_artist
+      else
+        my_artist = Artist.new(name)
+        # @@all << my_artist
+      end 
+      return my_artist
+  end
+
+  def print_songs 
+    songs.collect do |song|
+      puts song.name
+    end
+    # artist_songs = @songs.collect do |song|
+    #                   song.artist == self
+    #     if artist_songs
+    #       puts artist_songs.split("")
+    #     end
+    # end
+  end
+
+  
+end
