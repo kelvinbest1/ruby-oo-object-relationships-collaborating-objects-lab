@@ -1,3 +1,4 @@
+require "pry"
 class Artist
     attr_accessor :name, :songs
   
@@ -40,6 +41,7 @@ class Artist
     end
   
     def songs
-      @songs
+        @songs
     end
+           
   end
